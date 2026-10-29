@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- iPhone Full-Screen Configuration Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Qand">
+    
+    <title>Qand — Diabetes Management</title>
+    
+    <!-- Dynamic Favicon SVG -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FCE9E9'/><rect x='25' y='25' width='50' height='50' rx='12' fill='none' stroke='%23C96772' stroke-width='6'/><path d='M30 50 L42 50 L48 35 L54 65 L60 48 L70 48' fill='none' stroke='%23C96772' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FCE9E9'/><rect x='25' y='25' width='50' height='50' rx='12' fill='none' stroke='%23C96772' stroke-width='6'/><path d='M30 50 L42 50 L48 35 L54 65 L60 48 L70 48' fill='none' stroke='%23C96772' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    
+    <style>
+        :root {
+            --bg-accent: #FCE9E9;
+            --bg-card: #FFFDFC;
+            --primary: #C96772;
+            --text-dark: #8F3947;
+            --text-muted: #BC858F;
+            --safe-green: #E2EEDF;
+            --safe-green-text: #416336;
+            --border-color: #F5DFDF;
+            --app-bg: #FFFBFB;
+        }
+
+        [data-theme="dark"] {
+            --bg-accent: #331A1D;
+            --bg-card: #241416;
+            --primary: #E58793;
+            --text-dark: #FCDCDC;
+            --text-muted: #C0989E;
+            --safe-green: #203A27;
+            --safe-green-text: #A3DCA0;
+            --border-color: #4A282D;
+            --app-bg: #1B0D0F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--app-bg);
+            color: var(--text-dark);
+            padding-bottom: 85px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select, button.icon-btn {
+            background-color: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(143, 57, 71, 0.03);
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .welcome-box h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .welcome-box p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-btn {
+            background-color: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 12px 8px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quick-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--primary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #FFFDFC;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--app-bg);
+            color: var(--text-dark);
+            outline: none;
+            font-size: 15px;
+        }
+
+        .list-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-link {
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .action-link.delete {
+            color: #b33939;
+        }
+
+        /* Navigation Bar Styles */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            width: 20%;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            margin-bottom: 4px;
+        }
+
+        /* Simple Dynamic Simulation Chart */
+        .chart-box {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            padding: 15px 10px 5px 10px;
+            background: var(--bg-accent);
+            border-radius: 12px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background-color: var(--primary);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 5px;
+            transition: height 0.5s ease-out;
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .chart-val {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        /* Toast Alert System */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background-color: var(--safe-green);
+            color: var(--safe-green-text);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .badge-status {
+            padding: 4px 8px;
